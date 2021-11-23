@@ -59,7 +59,6 @@ resource "rancher2_node_pool" "node_pool" {
   name = var.node_pool_name
   hostname_prefix = var.hostname_prefix
   node_template_id = data.rancher2_node_template.rke_template.id
-  node_count = var.node_count
 
   quantity = var.node_count
   control_plane = true
