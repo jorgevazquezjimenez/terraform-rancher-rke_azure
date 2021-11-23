@@ -50,7 +50,7 @@ resource "rancher2_cluster" "rke" {
       "prometheus.resources.core.requests.memory" = "750Mi"
       "prometheus.retention" = "12h"
     }
-    version = "0.48.0"
+    version = "0.1.0"
   }
 }
 
