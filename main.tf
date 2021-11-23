@@ -93,64 +93,30 @@ resource "rancher2_node_pool" "workers_pool" {
   worker = true
 }
 
-resource "rancher2_cluster_sync" "rke_sync" {
-  cluster_id =  rancher2_cluster.rke.id
-  wait_monitoring = rancher2_cluster.rke.enable_cluster_monitoring
-}
-
-resource "rancher2_namespace" "istio_namespace" {
-  name = "istio-system"
-  project_id = rancher2_cluster_sync.rke_sync.system_project_id
-  description = "Istio namespace"
-}
-
-resource "rancher2_app" "istio" {
-  catalog_name     = "system-library"
-  name             = "cluster-istio"
-  project_id       = rancher2_namespace.istio_namespace.project_id
-  description = "Terraform app acceptance test"
-  target_namespace = rancher2_namespace.istio_namespace.id
-  template_name = "rancher-istio"
-  template_version = "0.1.1"
-  answers = {
-    "certmanager.enabled" = false
-    "enableCRDs" = true
-    "galley.enabled" = true
-    "gateways.enabled" = false
-    "gateways.istio-ingressgateway.resources.limits.cpu" = "2000m"
-    "gateways.istio-ingressgateway.resources.limits.memory" = "1024Mi"
-    "gateways.istio-ingressgateway.resources.requests.cpu" = "100m"
-    "gateways.istio-ingressgateway.resources.requests.memory" = "128Mi"
-    "gateways.istio-ingressgateway.type" = "NodePort"
-    "global.monitoring.type" = "cluster-monitoring"
-    "global.rancher.clusterId" = rancher2_cluster_sync.rke_sync.cluster_id
-    "istio_cni.enabled" = "false"
-    "istiocoredns.enabled" = "false"
-    "kiali.enabled" = "true"
-    "mixer.enabled" = "true"
-    "mixer.policy.enabled" = "true"
-    "mixer.policy.resources.limits.cpu" = "4800m"
-    "mixer.policy.resources.limits.memory" = "4096Mi"
-    "mixer.policy.resources.requests.cpu" = "1000m"
-    "mixer.policy.resources.requests.memory" = "1024Mi"
-    "mixer.telemetry.resources.limits.cpu" = "4800m",
-    "mixer.telemetry.resources.limits.memory" = "4096Mi"
-    "mixer.telemetry.resources.requests.cpu" = "1000m"
-    "mixer.telemetry.resources.requests.memory" = "1024Mi"
-    "mtls.enabled" = false
-    "nodeagent.enabled" = false
-    "pilot.enabled" = true
-    "pilot.resources.limits.cpu" = "1000m"
-    "pilot.resources.limits.memory" = "4096Mi"
-    "pilot.resources.requests.cpu" = "500m"
-    "pilot.resources.requests.memory" = "2048Mi"
-    "pilot.traceSampling" = "1"
-    "security.enabled" = true
-    "sidecarInjectorWebhook.enabled" = true
-    "tracing.enabled" = true
-    "tracing.jaeger.resources.limits.cpu" = "500m"
-    "tracing.jaeger.resources.limits.memory" = "1024Mi"
-    "tracing.jaeger.resources.requests.cpu" = "100m"
-    "tracing.jaeger.resources.requests.memory" = "100Mi"
+resource "rancher2_project" "app_project" {
+  name = "app"
+  cluster_id = rancher2_cluster.rke.id
+  resource_quota {
+    project_limit {
+      limits_cpu = "2000m"
+      limits_memory = "2000Mi"
+      requests_storage = "2Gi"
+    }
+    namespace_default_limit {
+      limits_cpu = "2000m"
+      limits_memory = "500Mi"
+      requests_storage = "1Gi"
+    }
   }
+  container_resource_limit {
+    limits_cpu = "20m"
+    limits_memory = "20Mi"
+    requests_cpu = "1m"
+    requests_memory = "1Mi"
+  }
+}
+
+resource "rancher2_namespace" "app" {
+  name = "app"
+  project_id = rancher2_project.app_project.id
 }
