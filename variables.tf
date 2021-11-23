@@ -24,9 +24,14 @@ variable "description" {
   description = "(Required) RKE cluster description"
 }
 
-variable "node_template" {
+variable "control_node_template" {
   type = string
-  description = "(Required) RKE node template name."
+  description = "(Required) RKE control nodes template name."
+}
+
+variable "workers_node_template" {
+  type = string
+  description = "(Required) RKE worker nodes template name."
 }
 
 variable "node_pool_name" {
@@ -41,9 +46,21 @@ variable "kubernetes_network_plugin" {
   default = "calico"
 }
 
-variable "node_count" {
+variable "etcd_node_count" {
   type = number
-  description = "(Required) Number of nodes in the cluster"
+  description = "(Required) Number of etcd nodes in the cluster"
+  default = 3
+}
+
+variable "controlplane_node_count" {
+  type = number
+  description = "(Required) Number of control plane nodes in the cluster"
+  default = 1
+}
+
+variable "workers_node_count" {
+  type = number
+  description = "(Required) Number of worker nodes in the cluster"
   default = 3
 }
 

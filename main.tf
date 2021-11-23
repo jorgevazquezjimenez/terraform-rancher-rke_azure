@@ -14,8 +14,12 @@ provider "rancher2" {
   insecure = true
 }
 
-data "rancher2_node_template" "rke_template" {
-  name = var.node_template
+data "rancher2_node_template" "controlplane_template" {
+  name = var.control_node_template
+}
+
+data "rancher2_node_template" "workers_template" {
+  name = var.workers_node_template
 }
 
 resource "rancher2_cluster" "rke" {
@@ -50,18 +54,41 @@ resource "rancher2_cluster" "rke" {
       "prometheus.resources.core.requests.memory" = "750Mi"
       "prometheus.retention" = "12h"
     }
-    # version = "16.6.0"
   }
 }
 
-resource "rancher2_node_pool" "node_pool" {
+resource "rancher2_node_pool" "etcd_pool" {
   cluster_id = rancher2_cluster.rke.id
-  name = var.node_pool_name
+  name = format("%s-%s",var.node_pool_name,"etcd")
   hostname_prefix = var.hostname_prefix
-  node_template_id = data.rancher2_node_template.rke_template.id
+  node_template_id = data.rancher2_node_template.controlplane_template.id
 
-  quantity = var.node_count
-  control_plane = true
+  quantity = var.etcd_node_count
+  control_plane = false
   etcd = true
+  worker = false
+}
+
+resource "rancher2_node_pool" "controlplane_pool" {
+  cluster_id = rancher2_cluster.rke.id
+  name = format("%s-%s",var.node_pool_name,"controlplane")
+  hostname_prefix = var.hostname_prefix
+  node_template_id = data.rancher2_node_template.controlplane_template.id
+
+  quantity = var.controlplane_node_count
+  control_plane = true
+  etcd = false
+  worker = false
+}
+
+resource "rancher2_node_pool" "workers_pool" {
+  cluster_id = rancher2_cluster.rke.id
+  name = format("%s-%s",var.node_pool_name,"workers")
+  hostname_prefix = var.hostname_prefix
+  node_template_id = data.rancher2_node_template.workers_template.id
+
+  quantity = var.workers_node_count
+  control_plane = false
+  etcd = false
   worker = true
 }
