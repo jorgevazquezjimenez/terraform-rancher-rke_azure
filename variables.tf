@@ -29,6 +29,12 @@ variable "node_template" {
   description = "(Required) RKE node template name."
 }
 
+variable "node_pool_name" {
+  type = string
+  description = "(Required) RKE node pool name."
+  default = "agentpool"
+}
+
 variable "kubernetes_network_plugin" {
   type = string
   description = "(Optional) Kubernetes network plugin. Default value is calico"
