@@ -24,12 +24,7 @@ variable "description" {
   description = "(Required) RKE cluster description"
 }
 
-variable "control_node_template" {
-  type = string
-  description = "(Required) RKE control nodes template name."
-}
-
-variable "workers_node_template" {
+variable "node_template_name" {
   type = string
   description = "(Required) RKE worker nodes template name."
 }
@@ -46,26 +41,32 @@ variable "kubernetes_network_plugin" {
   default = "calico"
 }
 
-variable "etcd_node_count" {
-  type = number
-  description = "(Required) Number of etcd nodes in the cluster"
-  default = 3
-}
-
-variable "controlplane_node_count" {
-  type = number
-  description = "(Required) Number of control plane nodes in the cluster"
-  default = 1
-}
-
-variable "workers_node_count" {
-  type = number
-  description = "(Required) Number of worker nodes in the cluster"
-  default = 3
-}
-
 variable "hostname_prefix" {
   type = string
   description = "(Optional) Hostname prefix for nodes. Default value is rancher"
   default = "rancher"
+}
+
+variable "is_control_plane" {
+  type = bool
+  description = "(Optional) Is this a control plane node. Default value is true"
+  default = true
+}
+
+variable "is_etcd" {
+  type = bool
+  description = "(Optional) Is this a etcd node. Default value is true"
+  default = true
+}
+
+variable "is_worker" {
+  type = bool
+  description = "(Optional) Is this a worker node. Default value is true"
+  default = true
+}
+
+variable "quantity" {
+  type = number
+  description = "(Optional) Number of nodes to create. Default value is 1"
+  default = 3
 }
