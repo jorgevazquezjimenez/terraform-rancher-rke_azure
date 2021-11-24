@@ -21,6 +21,7 @@ module "rke_cluster" {
   api_url = "https://sanes-rancher.westeurope.cloudapp.azure.com"
   access_key = var.access_key
   secret_key = var.secret_key
+  description = var.description
   name = var.name
 }
 
