@@ -30,13 +30,14 @@ module "node_pool" {
   version = "0.0.1"
 
   api_url = "https://sanes-rancher.westeurope.cloudapp.azure.com"
+  name = var.node_pool_name
   access_key = var.access_key
   secret_key = var.secret_key
   cluster_id = module.rke_cluster.id
   description = var.description
   node_template = var.workers_node_template
   hostname_prefix = var.hostname_prefix
-  is_controlplane = var.is_controlplane
+  is_control_plane = var.is_controlplane
   is_worker = var.is_worker
   is_etcd = var.is_etcd
   quantity = var.quantity
