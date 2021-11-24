@@ -16,13 +16,14 @@ provider "rancher2" {
 
 module "rke_cluster" {
   source = "app.terraform.io/georgevazj-lab/rke_cluster/rancher2"
-  version = "0.0.2"
+  version = "0.0.3"
 
   api_url = "https://sanes-rancher.westeurope.cloudapp.azure.com"
   access_key = var.access_key
   secret_key = var.secret_key
   description = var.description
   name = var.name
+  kubernetes_network_plugin = var.kubernetes_network_plugin
 }
 
 module "node_pool" {
