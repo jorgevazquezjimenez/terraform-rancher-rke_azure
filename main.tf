@@ -28,7 +28,7 @@ module "rke_cluster" {
 
 module "node_pool" {
   source  = "app.terraform.io/georgevazj-lab/node_pool/rancher2"
-  version = "0.0.1"
+  version = "0.0.2"
 
   api_url = "https://sanes-rancher.westeurope.cloudapp.azure.com"
   name = var.node_pool_name
@@ -38,8 +38,8 @@ module "node_pool" {
   description = var.description
   node_template = var.node_template_name
   hostname_prefix = var.hostname_prefix
-  is_control_plane = var.is_control_plane
-  is_worker = var.is_worker
-  is_etcd = var.is_etcd
+  is_control_plane = true
+  is_worker = true
+  is_etcd = true
   quantity = var.quantity
 }

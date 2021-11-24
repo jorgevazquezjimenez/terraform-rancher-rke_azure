@@ -47,24 +47,6 @@ variable "hostname_prefix" {
   default = "rancher"
 }
 
-variable "is_control_plane" {
-  type = bool
-  description = "(Optional) Is this a control plane node. Default value is true"
-  default = true
-}
-
-variable "is_etcd" {
-  type = bool
-  description = "(Optional) Is this a etcd node. Default value is true"
-  default = true
-}
-
-variable "is_worker" {
-  type = bool
-  description = "(Optional) Is this a worker node. Default value is true"
-  default = true
-}
-
 variable "quantity" {
   type = number
   description = "(Optional) Number of nodes to create. Default value is 1"
