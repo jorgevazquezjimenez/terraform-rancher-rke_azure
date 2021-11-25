@@ -1,4 +1,4 @@
-# Terraform scratch
+# Rancher RKE cluster
 
 ## Purpose
 

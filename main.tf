@@ -15,8 +15,8 @@ provider "rancher2" {
 }
 
 module "rke_cluster" {
-  source = "app.terraform.io/georgevazj-lab/rke_cluster/rancher2"
-  version = "0.0.3"
+  source = "app.terraform.io/sanesp-poc/rke_cluster/rancher2"
+  version = "0.0.4"
 
   api_url = "https://sanes-rancher.westeurope.cloudapp.azure.com"
   access_key = var.access_key
@@ -27,7 +27,7 @@ module "rke_cluster" {
 }
 
 module "node_pool" {
-  source  = "app.terraform.io/georgevazj-lab/node_pool/rancher2"
+  source  = "app.terraform.io/sanesp-poc/node_pool/rancher2"
   version = "0.0.3"
 
   api_url = "https://sanes-rancher.westeurope.cloudapp.azure.com"
