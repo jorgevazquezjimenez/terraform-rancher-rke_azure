@@ -60,7 +60,6 @@ resource "rancher2_app" "monitoring" {
   project_id       = rancher2_cluster_sync.sync.system_project_id
   target_namespace = rancher2_namespace.cattle-monitoring.id
   template_name    = "rancher-monitoring"
-  template_version = "0.3.1"
   description = "Rancher monitoring chart"
   wait = true
 }
