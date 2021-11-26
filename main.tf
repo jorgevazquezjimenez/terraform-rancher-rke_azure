@@ -93,10 +93,11 @@ resource "rancher2_app_v2" "monitoring" {
   cluster_id = rancher2_cluster_sync.sync.cluster_id
   project_id = rancher2_cluster_sync.sync.system_project_id
   name = "rancher-monitoring"
-  namespace = "cattle-monitoring-system"
+  namespace = rancher2_namespace.cattle-monitoring.name
   repo_name = "rancher-charts"
   chart_name = "rancher-monitoring"
   chart_version = "9.4.200"
+  cleanup_on_fail = true
 }
 
 module "project" {
