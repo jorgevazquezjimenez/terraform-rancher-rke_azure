@@ -43,3 +43,19 @@ module "node_pool" {
   is_etcd = true
   quantity = var.quantity
 }
+
+resource "rancher2_cluster_sync" "sync" {
+  cluster_id = module.rke_cluster.cluster_id
+  node_pool_ids = [module.node_pool.node_pool_id]
+}
+
+module "project" {
+  source  = "app.terraform.io/georgevazj-lab/project/rancher"
+  version = "0.0.1"
+
+  access_key = var.access_key
+  api_url    = var.api_url
+  cluster_id = rancher2_cluster_sync.sync.cluster_id
+  name       = var.project_name
+  secret_key = var.secret_key
+}
