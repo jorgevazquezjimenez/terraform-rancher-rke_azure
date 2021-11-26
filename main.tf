@@ -3,6 +3,7 @@ terraform {
   required_providers {
     rancher2 = {
       source = "rancher/rancher2"
+      version = ">=1.21.0"
     }
   }
 }
@@ -36,7 +37,7 @@ module "controlplane" {
   description = "Control plane pool"
   cluster_id = module.rke_cluster.cluster_id
   api_url = "https://sanes-rancher.westeurope.cloudapp.azure.com"
-  node_template = "rke-playground-etcd"
+  node_template = "rke-playground-controlplane"
   is_control_plane = true
   is_worker = false
   is_etcd = false
@@ -80,7 +81,7 @@ module "node_pool" {
 
 resource "rancher2_cluster_sync" "sync" {
   cluster_id = module.rke_cluster.cluster_id
-  node_pool_ids = [module.node_pool.node_pool_id]
+  node_pool_ids = [module.controlplane.node_pool_id,module.etcd.node_pool_id,module.node_pool.node_pool_id]
 }
 
 resource "rancher2_namespace" "cattle-monitoring" {
@@ -88,14 +89,14 @@ resource "rancher2_namespace" "cattle-monitoring" {
   project_id = rancher2_cluster_sync.sync.system_project_id
 }
 
-resource "rancher2_app" "monitoring" {
-  catalog_name     = "system-library"
-  name             = "rancher-monitoring"
-  project_id       = rancher2_cluster_sync.sync.system_project_id
-  target_namespace = rancher2_namespace.cattle-monitoring.id
-  template_name    = "rancher-monitoring"
-  description = "Rancher monitoring chart"
-  wait = true
+resource "rancher2_app_v2" "monitoring" {
+  cluster_id = rancher2_cluster_sync.sync.cluster_id
+  project_id = rancher2_cluster_sync.sync.system_project_id
+  name = "rancher-monitoring"
+  namespace = "cattle-monitoring-system"
+  repo_name = "rancher-charts"
+  chart_name = "rancher-monitoring"
+  chart_version = "9.4.200"
 }
 
 module "project" {
