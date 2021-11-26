@@ -55,11 +55,12 @@ resource "rancher2_namespace" "cattle-monitoring" {
 }
 
 resource "rancher2_app" "monitoring" {
-  catalog_name     = "Partners"
-  name             = "rancher-monitoring-crd"
+  catalog_name     = "system-library"
+  name             = "rancher-monitoring"
   project_id       = rancher2_cluster_sync.sync.system_project_id
   target_namespace = rancher2_namespace.cattle-monitoring.id
-  template_name    = "rancher-monitoring-crd"
+  template_name    = "rancher-monitoring"
+  template_version = "0.3.1"
   description = "Rancher monitoring chart"
   wait = true
 }
