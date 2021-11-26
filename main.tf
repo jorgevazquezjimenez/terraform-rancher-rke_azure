@@ -16,7 +16,7 @@ provider "rancher2" {
 
 module "rke_cluster" {
   source = "app.terraform.io/georgevazj-lab/rke_cluster/rancher2"
-  version = "0.0.3"
+  version = "0.0.4"
 
   api_url = "https://sanes-rancher.westeurope.cloudapp.azure.com"
   access_key = var.access_key
@@ -49,6 +49,22 @@ resource "rancher2_cluster_sync" "sync" {
   node_pool_ids = [module.node_pool.node_pool_id]
 }
 
+resource "rancher2_namespace" "cattle-monitoring" {
+  name       = "cattle-monitoring-system"
+  project_id = rancher2_cluster_sync.sync.system_project_id
+}
+
+resource "rancher2_app" "monitoring" {
+  catalog_name     = "rancher-partner-charts"
+  name             = "rancher-monitoring-crd"
+  project_id       = rancher2_cluster_sync.sync.system_project_id
+  target_namespace = rancher2_namespace.cattle-monitoring.id
+  template_name    = "rancher-monitoring-crd"
+  template_version = "100.0.0+up16.6.0"
+  description = "Rancher monitoring chart"
+  wait = true
+}
+
 module "project" {
   source  = "app.terraform.io/georgevazj-lab/project/rancher"
   version = "0.0.1"
@@ -58,4 +74,9 @@ module "project" {
   cluster_id = rancher2_cluster_sync.sync.cluster_id
   name       = var.project_name
   secret_key = var.secret_key
+}
+
+resource "rancher2_namespace" "app_namespace" {
+  name       = "app_namespace"
+  project_id = module.project.id
 }
