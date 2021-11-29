@@ -96,7 +96,7 @@ resource "rancher2_app_v2" "monitoring" {
   namespace = rancher2_namespace.cattle-monitoring.name
   repo_name = "rancher-charts"
   chart_name = "rancher-monitoring"
-  chart_version = "9.4.200"
+  chart_version = "16.6.0"
   cleanup_on_fail = true
 }
 
