@@ -20,7 +20,10 @@ module "rke_cluster" {
   source = "app.terraform.io/sanesp-poc/rke_cluster/rancher2"
 =======
   source = "app.terraform.io/georgevazj-lab/rke_cluster/rancher2"
+<<<<<<< HEAD
 >>>>>>> ddf13174267ab4696ec48b7951a1b8b029d6043d
+=======
+>>>>>>> upstream/main
   version = "0.0.4"
 
   api_url = "https://sanes-rancher.westeurope.cloudapp.azure.com"
@@ -32,6 +35,43 @@ module "rke_cluster" {
 }
 
 module "controlplane" {
+<<<<<<< HEAD
+=======
+  source  = "app.terraform.io/georgevazj-lab/node_pool/rancher2"
+  version = "0.0.3"
+
+  name = "${var.node_pool_name}-control"
+  access_key = var.access_key
+  secret_key = var.secret_key
+  description = "Control plane pool"
+  cluster_id = module.rke_cluster.cluster_id
+  api_url = "https://sanes-rancher.westeurope.cloudapp.azure.com"
+  node_template = "rke-playground-controlplane"
+  is_control_plane = true
+  is_worker = false
+  is_etcd = false
+  quantity = 3
+}
+
+module "etcd" {
+  source  = "app.terraform.io/georgevazj-lab/node_pool/rancher2"
+  version = "0.0.3"
+
+  name = "${var.node_pool_name}-etcd"
+  access_key = var.access_key
+  secret_key = var.secret_key
+  description = "etcd pool"
+  cluster_id = module.rke_cluster.cluster_id
+  api_url = "https://sanes-rancher.westeurope.cloudapp.azure.com"
+  node_template = "rke-playground-etcd"
+  is_control_plane = false
+  is_worker = false
+  is_etcd = true
+  quantity = 3
+}
+
+module "node_pool" {
+>>>>>>> upstream/main
   source  = "app.terraform.io/georgevazj-lab/node_pool/rancher2"
   version = "0.0.3"
 
