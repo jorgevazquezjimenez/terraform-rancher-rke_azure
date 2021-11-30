@@ -94,9 +94,9 @@ resource "rancher2_app_v2" "monitoring" {
   project_id = rancher2_cluster_sync.sync.system_project_id
   name = "rancher-monitoring"
   namespace = rancher2_namespace.cattle-monitoring.name
-  repo_name = "rancher-charts"
-  chart_name = "rancher-monitoring"
-  chart_version = "16.6.0"
+  repo_name = "rancher-monitoring"
+  chart_name = "rancher-monitoring-crd"
+  chart_version = "100.0.0+up16.6.0"
   cleanup_on_fail = true
 }
 
