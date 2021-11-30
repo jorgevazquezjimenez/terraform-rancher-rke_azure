@@ -52,3 +52,9 @@ variable "quantity" {
   description = "(Optional) Number of nodes to create. Default value is 1"
   default = 3
 }
+
+variable "project_name" {
+  type = string
+  description = "(Required) App project name"
+  default = "app_project"
+}
