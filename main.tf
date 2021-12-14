@@ -18,7 +18,7 @@ provider "rancher2" {
 module "rke_cluster" {
   source  = "app.terraform.io/sanesp-poc/rke_cluster/rancher2"
   version = "0.0.4"
-  
+
   api_url = "https://sanes-rancher.westeurope.cloudapp.azure.com"
   access_key = var.access_key
   secret_key = var.secret_key
@@ -55,7 +55,7 @@ module "controlplane" {
   description = "Control plane pool"
   cluster_id = module.rke_cluster.cluster_id
   api_url = "https://sanes-rancher.westeurope.cloudapp.azure.com"
-  node_template = "	rke-playground-controlplane"
+  node_template = "rke-playground-controlplane"
   is_control_plane = true
   is_worker = false
   is_etcd = false
