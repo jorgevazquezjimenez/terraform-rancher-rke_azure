@@ -33,20 +33,20 @@ module "etcd" {
 }
 
 
-module "etcd" {
+module "controlplane" {
   source  = "app.terraform.io/sanesp-poc/node_pool/rancher2"
   version = "0.0.3"
 
-  name = "${var.node_pool_name}-etcd"
+  name = "${var.node_pool_name}-control"
   access_key = var.access_key
   secret_key = var.secret_key
-  description = "etcd pool"
+  description = "Control plane pool"
   cluster_id = module.rke_cluster.cluster_id
   api_url = "https://sanes-rancher.westeurope.cloudapp.azure.com"
-  node_template = "rke-playground-etcd"
-  is_control_plane = false
+  node_template = "	rke-playground-controlplane"
+  is_control_plane = true
   is_worker = false
-  is_etcd = true
+  is_etcd = false
   quantity = 3
 }
 
